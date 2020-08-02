@@ -1,0 +1,35 @@
+version: v1.0
+name: extended_kernel_whyred_ci
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: "Extended"
+    task:
+      secrets:
+      - name: Tokens
+      - name: Version
+      jobs:
+      - name: Building standar version
+        commands:
+          - sudo apt install bc
+          - checkout
+          - git clone https://github.com/attack11/scripts.git -b semaphore script && cd script
+          - bash setup.sh --clang
+          - export DEFCONFIG=whyred_defconfig
+          - bash build.sh --clang --oldcam
+  - name: "Extended-newcam"
+    task:
+      secrets:
+      - name: Tokens
+      - name: Version
+      jobs:
+      - name: Building new-cam version
+        commands:
+          - sudo apt install bc
+          - checkout
+          - git clone https://github.com/attack11/scripts.git -b semaphore script && cd script
+          - bash setup.sh --clang
+          - export DEFCONFIG=whyred-newcam_defconfig
+          - bash build.sh --clang --newcam
